@@ -136,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void Process() {
         switch (mProcessValue) {
             case 1:
+                mTextViewAnswer.setText("");
                 switch (mOperationValue) {
                     case 0:
                         if (mFirstValue.equals("0")) {
@@ -173,7 +174,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         mOperationValue = 0;
                     }
                 } else {
-                    mTextViewFormula.setText(mFirstValue + Symbol());
+                    if (mSecondValue.equals("")) {
+                        mTextViewFormula.setText(mFirstValue + Symbol());
+                    } else {
+                        //次の計算法
+                        int ope = mOperationValue % 10;
+                        //一個前の計算法
+                        mOperationValue /= 10;
+                        Answer();
+                        mOperationValue = ope;
+                        mFirstValue = mTextViewAnswer.getText().toString();
+                        mSecondValue = "";
+                        mTextViewFormula.setText(mFirstValue + Symbol());
+                    }
                 }
                 break;
             case 3:
@@ -241,34 +254,56 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mProcessValue = 1;
                 break;
             case R.id.button_plus:
-                if (mOperationValue == 5) {
-                    mOperationValue += 1;
-                } else {
-                    mOperationValue = 1;
+                switch (mOperationValue) {
+                    case 5:
+                        mOperationValue += 1;
+                        break;
+                    case 0:
+                        mOperationValue = 1;
+                        break;
+                    default:
+                        //連続計算をするときよう
+                        //十の位に一個前の計算法を保存し、一の位に次の計算法を記録
+                        mOperationValue = mOperationValue * 10 + 1;
                 }
                 mProcessValue = 2;
                 break;
             case R.id.button_minus:
-                if (mOperationValue == 5) {
-                    mOperationValue += 2;
-                } else {
-                    mOperationValue = 2;
+                switch (mOperationValue) {
+                    case 5:
+                        mOperationValue += 2;
+                        break;
+                    case 0:
+                        mOperationValue = 2;
+                        break;
+                    default:
+                        mOperationValue = mOperationValue * 10 + 2;
                 }
                 mProcessValue = 2;
                 break;
             case R.id.button_multiply:
-                if (mOperationValue == 5) {
-                    mOperationValue += 3;
-                } else {
-                    mOperationValue = 3;
+                switch (mOperationValue) {
+                    case 5:
+                        mOperationValue += 3;
+                        break;
+                    case 0:
+                        mOperationValue = 3;
+                        break;
+                     default:
+                         mOperationValue = mOperationValue * 10 + 3;
                 }
                 mProcessValue = 2;
                 break;
             case R.id.button_divide:
-                if (mOperationValue == 5) {
-                    mOperationValue += 4;
-                } else {
-                    mOperationValue = 4;
+                switch (mOperationValue) {
+                    case 5:
+                        mOperationValue += 4;
+                        break;
+                    case 0:
+                        mOperationValue = 4;
+                        break;
+                    default:
+                        mOperationValue = mOperationValue * 10 + 4;
                 }
                 mProcessValue = 2;
                 break;
